@@ -1,4 +1,4 @@
-package de.netherspace.libs.kotlin-clrs
+package de.netherspace.libs.kotlinclrs
 
 interface List<T> {
 

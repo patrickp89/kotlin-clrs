@@ -1,4 +1,4 @@
-package de.pp.test.kotlin
+package de.netherspace.libs.kotlinclrs
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
