@@ -1,5 +1,8 @@
 package de.netherspace.libs.kotlinclrs
 
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.`is` as Is
@@ -10,6 +13,16 @@ class KotlinTest {
     @Test
     fun testKotlinSinglyLinkedList() {
         val list = SinglyLinkedList<String>()
+        assertThat(testListImplementation(list), Is(true))
+    }
+
+    @Test
+    fun testKotlinDoublyLinkedList() {
+        val list = DoublyLinkedList<String>()
+        assertThat(testListImplementation(list), Is(true))
+    }
+
+    private fun testListImplementation(list: List<String>): Boolean {
         assertThat(list.size(), Is(0))
 
         assertThat(list.insert("eins", 1L), Is(true))
@@ -23,9 +36,11 @@ class KotlinTest {
         assertThat(list.search(1L), Is("eins"))
         assertThat(list.search(5L), Is(emptyOrNullString()))
 
-        assertThat(list.delete(3L), Is("drei"));
+        assertThat(list.delete(3L), Is("drei"))
         assertThat(list.search(3L), Is(emptyOrNullString()))
         assertThat(list.search(1L), Is("eins"))
         assertThat(list.size(), Is(3))
+
+        return true
     }
 }

@@ -1,4 +1,4 @@
-package de.netherspace.libs.kotlinclrs
+package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -13,15 +13,8 @@ class SinglyLinkedList<T> : List<T> {
     }
 
     override fun search(k: Long): T? {
-        var x = head.next
-        while (x !== tail && x.key != k) {
-            x = x.next
-        }
-        return if (x === head) {
-            null
-        } else {
-            x.element
-        }
+        val p = searchPredecessor(k) ?: return null
+        return p.next.element
     }
 
     override fun insert(x: T, k: Long): Boolean {
@@ -47,8 +40,8 @@ class SinglyLinkedList<T> : List<T> {
     }
 
     private fun searchPredecessor(k: Long): Node<T>? {
+        var p = head
         var x = head.next
-        var p = x
         while (x !== tail && x.key != k) {
             p = x
             x = x.next
