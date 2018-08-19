@@ -2,61 +2,63 @@ package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
 import java.util.concurrent.atomic.AtomicInteger
 
-class SinglyLinkedList<T> : List<T> {
+class DoublyLinkedList<T> : List<T> {
 
-    private val head: Node<T> = Node(null, -1)
-    private val tail: Node<T> = Node(null, -1)
+    private val head: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
+    private val tail: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
     private val size: AtomicInteger = AtomicInteger(0)
 
     constructor() {
         head.next = tail
+        tail.pred = head
     }
 
     override fun search(k: Long): T? {
-        val p = searchPredecessor(k) ?: return null
-        return p.next.element
+        val x = searchNode(k) ?: return null
+        return x.element
     }
 
     override fun insert(x: T, k: Long): Boolean {
-        val newNode = Node(x, k)
+        val newNode = DoublyLinkedNode(x, k)
         val y = head.next
         head.next = newNode
         newNode.next = y
+        y.pred = newNode
+        newNode.pred = head
         size.incrementAndGet()
         return true
     }
 
     override fun delete(k: Long): T? {
-        val p = searchPredecessor(k) ?: return null
-        val x = p.next.element
-        val pnn = p.next.next
-        p.next = pnn
+        val x = searchNode(k) ?: return null
+        val p = x.pred
+        p.next = x.next
+        p.next.pred = p
         size.decrementAndGet()
-        return x
+        return x.element
     }
 
     override fun size(): Int {
         return size.get()
     }
 
-    private fun searchPredecessor(k: Long): Node<T>? {
-        var p = head
+    private fun searchNode(k: Long): DoublyLinkedNode<T>? {
         var x = head.next
         while (x !== tail && x.key != k) {
-            p = x
             x = x.next
         }
         return if (x === tail) {
             null
         } else {
-            p
+            x
         }
     }
 
-    class Node<T>(e: T?, k: Long) {
+    class DoublyLinkedNode<T>(e: T?, k: Long) {
         val element = e
         val key = k
         var next = this
+        var pred = this
     }
 
 }
