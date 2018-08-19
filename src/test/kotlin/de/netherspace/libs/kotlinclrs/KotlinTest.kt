@@ -1,5 +1,6 @@
 package de.netherspace.libs.kotlinclrs
 
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.`is` as Is

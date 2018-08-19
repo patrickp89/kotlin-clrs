@@ -1,4 +1,4 @@
-package de.netherspace.libs.kotlinclrs
+package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
 import java.util.concurrent.atomic.AtomicInteger
 
