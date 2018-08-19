@@ -4,6 +4,7 @@ import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
 import de.netherspace.libs.kotlinclrs.sorting.InsertionSort
+import de.netherspace.libs.kotlinclrs.sorting.MergeSort
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.`is` as Is
@@ -50,7 +51,21 @@ class KotlinTest {
         val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
         var exp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-        InsertionSort.sort(A)
+        val inss = InsertionSort()
+        inss.sort(A)
+
+        for (i in A.indices) {
+            assertThat(A.get(i), Is(exp.get(i)))
+        }
+    }
+
+    @Test
+    fun testMergeSort() {
+        val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
+        var exp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+        val ms = MergeSort()
+        ms.sort(A)
 
         for (i in A.indices) {
             assertThat(A.get(i), Is(exp.get(i)))
