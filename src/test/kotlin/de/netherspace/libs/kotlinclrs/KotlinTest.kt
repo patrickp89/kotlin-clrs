@@ -3,10 +3,7 @@ package de.netherspace.libs.kotlinclrs
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
-import de.netherspace.libs.kotlinclrs.sorting.BubbleSort
-import de.netherspace.libs.kotlinclrs.sorting.InsertionSort
-import de.netherspace.libs.kotlinclrs.sorting.MergeSort
-import de.netherspace.libs.kotlinclrs.sorting.SortingAlgorithm
+import de.netherspace.libs.kotlinclrs.sorting.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
 import org.junit.Test
@@ -51,22 +48,25 @@ class KotlinTest {
     @Test
     fun testInsertionSort() {
         val a = getTestArray()
-        val inss = InsertionSort()
-        testSortingalgorithm(a, inss)
+        testSortingAlgorithm(a, InsertionSort())
     }
 
     @Test
     fun testMergeSort() {
         val a = getTestArray()
-        val ms = MergeSort()
-        testSortingalgorithm(a, ms)
+        testSortingAlgorithm(a, MergeSort())
     }
 
     @Test
     fun testBubbleSort() {
         val a = getTestArray()
-        val ms = BubbleSort()
-        testSortingalgorithm(a, ms)
+        testSortingAlgorithm(a, BubbleSort())
+    }
+
+    @Test
+    fun testQuickSort() {
+        val a = getTestArray()
+        testSortingAlgorithm(a, QuickSort())
     }
 
     private fun getTestArray(): Array<Int> {
@@ -77,7 +77,7 @@ class KotlinTest {
         return arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
     }
 
-    private fun testSortingalgorithm(a: Array<Int>, algo: SortingAlgorithm) {
+    private fun testSortingAlgorithm(a: Array<Int>, algo: SortingAlgorithm) {
         val exp = getSortedTestArray()
         algo.sort(a)
 
