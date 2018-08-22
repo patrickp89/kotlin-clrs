@@ -3,6 +3,7 @@ package de.netherspace.libs.kotlinclrs
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
+import de.netherspace.libs.kotlinclrs.sorting.BubbleSort
 import de.netherspace.libs.kotlinclrs.sorting.InsertionSort
 import de.netherspace.libs.kotlinclrs.sorting.MergeSort
 import de.netherspace.libs.kotlinclrs.sorting.SortingAlgorithm
@@ -64,7 +65,7 @@ class KotlinTest {
     @Test
     fun testBubbleSort() {
         val a = getTestArray()
-        val ms = MergeSort()
+        val ms = BubbleSort()
         testSortingalgorithm(a, ms)
     }
 
@@ -77,8 +78,7 @@ class KotlinTest {
     }
 
     private fun testSortingalgorithm(a: Array<Int>, algo: SortingAlgorithm) {
-        var exp = getSortedTestArray()
-
+        val exp = getSortedTestArray()
         algo.sort(a)
 
         for (i in a.indices) {
