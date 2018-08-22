@@ -3,13 +3,11 @@ package de.netherspace.libs.kotlinclrs
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
-import de.netherspace.libs.kotlinclrs.sorting.InsertionSort
-import de.netherspace.libs.kotlinclrs.sorting.MergeSort
-import de.netherspace.libs.kotlinclrs.sorting.SortingAlgorithm
+import de.netherspace.libs.kotlinclrs.sorting.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
-import org.hamcrest.Matchers.`is` as Is
 import org.junit.Test
+import org.hamcrest.Matchers.`is` as Is
 
 class KotlinTest {
 
@@ -49,25 +47,42 @@ class KotlinTest {
 
     @Test
     fun testInsertionSort() {
-        val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
-        val inss = InsertionSort()
-        testSortingAlgorithm(A, inss)
+        val a = getTestArray()
+        testSortingAlgorithm(a, InsertionSort())
     }
 
     @Test
     fun testMergeSort() {
-        val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
-        val ms = MergeSort()
-        testSortingAlgorithm(A, ms)
+        val a = getTestArray()
+        testSortingAlgorithm(a, MergeSort())
     }
 
-    private fun testSortingAlgorithm(A: Array<Int>, algo: SortingAlgorithm) {
-        var exp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    @Test
+    fun testBubbleSort() {
+        val a = getTestArray()
+        testSortingAlgorithm(a, BubbleSort())
+    }
 
-        algo.sort(A)
+    @Test
+    fun testQuickSort() {
+        val a = getTestArray()
+        testSortingAlgorithm(a, QuickSort())
+    }
 
-        for (i in A.indices) {
-            assertThat(A[i], Is(exp[i]))
+    private fun getTestArray(): Array<Int> {
+        return arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
+    }
+
+    private fun getSortedTestArray(): Array<Int> {
+        return arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    }
+
+    private fun testSortingAlgorithm(a: Array<Int>, algo: SortingAlgorithm) {
+        val exp = getSortedTestArray()
+        algo.sort(a)
+
+        for (i in a.indices) {
+            assertThat(a[i], Is(exp[i]))
         }
     }
 }
