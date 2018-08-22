@@ -8,8 +8,8 @@ import de.netherspace.libs.kotlinclrs.sorting.MergeSort
 import de.netherspace.libs.kotlinclrs.sorting.SortingAlgorithm
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
-import org.hamcrest.Matchers.`is` as Is
 import org.junit.Test
+import org.hamcrest.Matchers.`is` as Is
 
 class KotlinTest {
 
@@ -49,25 +49,40 @@ class KotlinTest {
 
     @Test
     fun testInsertionSort() {
-        val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
+        val a = getTestArray()
         val inss = InsertionSort()
-        testSortingAlgorithm(A, inss)
+        testSortingalgorithm(a, inss)
     }
 
     @Test
     fun testMergeSort() {
-        val A = arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
+        val a = getTestArray()
         val ms = MergeSort()
-        testSortingAlgorithm(A, ms)
+        testSortingalgorithm(a, ms)
     }
 
-    private fun testSortingAlgorithm(A: Array<Int>, algo: SortingAlgorithm) {
-        var exp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    @Test
+    fun testBubbleSort() {
+        val a = getTestArray()
+        val ms = MergeSort()
+        testSortingalgorithm(a, ms)
+    }
 
-        algo.sort(A)
+    private fun getTestArray(): Array<Int> {
+        return arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
+    }
 
-        for (i in A.indices) {
-            assertThat(A[i], Is(exp[i]))
+    private fun getSortedTestArray(): Array<Int> {
+        return arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    }
+
+    private fun testSortingalgorithm(a: Array<Int>, algo: SortingAlgorithm) {
+        var exp = getSortedTestArray()
+
+        algo.sort(a)
+
+        for (i in a.indices) {
+            assertThat(a[i], Is(exp[i]))
         }
     }
 }
