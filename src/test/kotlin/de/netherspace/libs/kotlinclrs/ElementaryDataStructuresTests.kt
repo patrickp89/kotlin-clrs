@@ -8,7 +8,7 @@ import org.hamcrest.Matchers
 import org.junit.Test
 
 class ElementaryDataStructuresTests {
-    
+
     @Test
     fun testSinglyLinkedList() {
         val list = SinglyLinkedList<String>()

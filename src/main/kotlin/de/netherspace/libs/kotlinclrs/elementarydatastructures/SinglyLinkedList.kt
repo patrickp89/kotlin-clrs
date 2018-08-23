@@ -6,7 +6,7 @@ class SinglyLinkedList<T> : List<T> {
 
     private val head: Node<T> = Node(null, -1)
     private val tail: Node<T> = Node(null, -1)
-    private val size: AtomicInteger = AtomicInteger(0)
+    private val size = AtomicInteger(0)
 
     constructor() {
         head.next = tail
