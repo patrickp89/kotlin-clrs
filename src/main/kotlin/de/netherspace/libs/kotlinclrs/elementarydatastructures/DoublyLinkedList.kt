@@ -6,7 +6,7 @@ class DoublyLinkedList<T> : List<T> {
 
     private val head: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
     private val tail: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
-    private val size: AtomicInteger = AtomicInteger(0)
+    private val size = AtomicInteger(0)
 
     constructor() {
         head.next = tail
