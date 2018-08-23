@@ -7,7 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.`is` as Is
 
-class ElementaryDataStructuresTests {
+class ElementaryDataStructuresTest {
 
     @Test
     fun testSinglyLinkedList() {
@@ -29,7 +29,15 @@ class ElementaryDataStructuresTests {
         assertThat(stack.push("eins"), Is(true))
         assertThat(stack.isEmpty(), Is(false))
 
-        assertThat(stack.pop(), Is("einszz"))
+        assertThat(stack.pop(), Is("eins"))
+        assertThat(stack.isEmpty(), Is(true))
+
+        for (i in 1..15) {
+            assertThat(stack.push("test $i"), Is(true))
+        }
+        for (i in 15 downTo 1) {
+            assertThat(stack.pop(), Is("test $i"))
+        }
         assertThat(stack.isEmpty(), Is(true))
     }
 

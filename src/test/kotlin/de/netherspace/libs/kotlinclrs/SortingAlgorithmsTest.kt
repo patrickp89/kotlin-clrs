@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is` as Is
 import org.junit.Test
 
-class SortingAlgorithmsTests {
+class SortingAlgorithmsTest {
 
     @Test
     fun testInsertionSort() {
