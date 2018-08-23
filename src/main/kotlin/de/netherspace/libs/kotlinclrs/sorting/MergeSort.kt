@@ -21,8 +21,8 @@ class MergeSort : SortingAlgorithm {
         val n1 = q-p+1
         val n2 = r-q
 
-        var L = Array<Int>(n1+1) {_ -> 0}
-        var R = Array<Int>(n2+1) {_ -> 0}
+        var L = Array(n1+1) {_ -> 0}
+        var R = Array(n2+1) {_ -> 0}
 
         for (i in 0 until n1) {
             L[i] = A[p+i]

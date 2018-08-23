@@ -4,19 +4,25 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ArrayStack<T> : Stack<T> {
 
-    private val A = emptyArray<StackElement<T>>()
+    private val a = Array<StackElement<T>>(10) {_ -> StackElement(null)}
     private var top = AtomicInteger(0)
 
     override fun push(x: T): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        a[top.incrementAndGet()] = StackElement(x)
+        //TODO: resize!
+        return true
     }
 
-    override fun pop(): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun pop(): T? {
+        return if (!isEmpty()) {
+            a[top.getAndDecrement()].element
+        } else {
+            null
+        }
     }
 
     override fun isEmpty(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return top.get() == 0
     }
 
     class StackElement<T>(e: T?) {

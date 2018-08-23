@@ -1,44 +1,56 @@
 package de.netherspace.libs.kotlinclrs
 
-import de.netherspace.libs.kotlinclrs.elementarydatastructures.DoublyLinkedList
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.*
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
-import de.netherspace.libs.kotlinclrs.elementarydatastructures.SinglyLinkedList
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
 import org.junit.Test
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.emptyOrNullString
+import org.hamcrest.Matchers.`is` as Is
 
 class ElementaryDataStructuresTests {
 
     @Test
     fun testSinglyLinkedList() {
         val list = SinglyLinkedList<String>()
-        MatcherAssert.assertThat(testListImplementation(list), Matchers.`is`(true))
+        assertThat(testListImplementation(list), Is(true))
     }
 
     @Test
     fun testDoublyLinkedList() {
         val list = DoublyLinkedList<String>()
-        MatcherAssert.assertThat(testListImplementation(list), Matchers.`is`(true))
+        assertThat(testListImplementation(list), Is(true))
+    }
+
+    @Test
+    fun testArrayStack() {
+        val stack: Stack<String> = ArrayStack()
+        assertThat(stack.isEmpty(), Is(true))
+
+        assertThat(stack.push("eins"), Is(true))
+        assertThat(stack.isEmpty(), Is(false))
+
+        assertThat(stack.pop(), Is("einszz"))
+        assertThat(stack.isEmpty(), Is(true))
     }
 
     private fun testListImplementation(list: List<String>): Boolean {
-        MatcherAssert.assertThat(list.size(), Matchers.`is`(0))
+        assertThat(list.size(), Is(0))
 
-        MatcherAssert.assertThat(list.insert("eins", 1L), Matchers.`is`(true))
-        MatcherAssert.assertThat(list.insert("zwei", 2L), Matchers.`is`(true))
-        MatcherAssert.assertThat(list.insert("drei", 3L), Matchers.`is`(true))
-        MatcherAssert.assertThat(list.insert("zwei-zwei", 2L), Matchers.`is`(true))
-        MatcherAssert.assertThat(list.size(), Matchers.`is`(4))
+        assertThat(list.insert("eins", 1L), Is(true))
+        assertThat(list.insert("zwei", 2L), Is(true))
+        assertThat(list.insert("drei", 3L), Is(true))
+        assertThat(list.insert("zwei-zwei", 2L), Is(true))
+        assertThat(list.size(), Is(4))
 
-        MatcherAssert.assertThat(list.search(3L), Matchers.`is`("drei"))
-        MatcherAssert.assertThat(list.search(2L), Matchers.`is`("zwei-zwei")) //the 2nd element with key 2 was inserted BEFORE "zwei"!
-        MatcherAssert.assertThat(list.search(1L), Matchers.`is`("eins"))
-        MatcherAssert.assertThat(list.search(5L), Matchers.`is`(Matchers.emptyOrNullString()))
+        assertThat(list.search(3L), Is("drei"))
+        assertThat(list.search(2L), Is("zwei-zwei")) //the 2nd element with key 2 was inserted BEFORE "zwei"!
+        assertThat(list.search(1L), Is("eins"))
+        assertThat(list.search(5L), Is(emptyOrNullString()))
 
-        MatcherAssert.assertThat(list.delete(3L), Matchers.`is`("drei"))
-        MatcherAssert.assertThat(list.search(3L), Matchers.`is`(Matchers.emptyOrNullString()))
-        MatcherAssert.assertThat(list.search(1L), Matchers.`is`("eins"))
-        MatcherAssert.assertThat(list.size(), Matchers.`is`(3))
+        assertThat(list.delete(3L), Is("drei"))
+        assertThat(list.search(3L), Is(emptyOrNullString()))
+        assertThat(list.search(1L), Is("eins"))
+        assertThat(list.size(), Is(3))
 
         return true
     }
