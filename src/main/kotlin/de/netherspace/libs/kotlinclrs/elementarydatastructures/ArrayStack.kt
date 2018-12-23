@@ -6,7 +6,7 @@ class ArrayStack<T> : Stack<T> {
 
     private val initialArraySize = 10
 
-    private var a = Array<StackElement<T>>(initialArraySize) { _ -> StackElement(null)}
+    private var a = Array<StackElement<T>>(initialArraySize) { StackElement(null) }
     private val top = AtomicInteger(0)
 
     override fun push(x: T): Boolean {
@@ -32,13 +32,13 @@ class ArrayStack<T> : Stack<T> {
         return top.get() == 0
     }
 
-    private fun resizeArray(A: Array<StackElement<T>>) : Array<StackElement<T>> {
+    private fun resizeArray(A: Array<StackElement<T>>): Array<StackElement<T>> {
         return copy(A) { s: Int -> s * 2 }
     }
 
-    private fun shrink(A: Array<StackElement<T>>) : Array<StackElement<T>> {
+    private fun shrink(A: Array<StackElement<T>>): Array<StackElement<T>> {
         //check for min. threshold:
-        return if (A.size >= initialArraySize * 2 ) {
+        return if (A.size >= initialArraySize * 2) {
             copy(A) { s: Int -> s / 2 }
         } else {
             A
@@ -47,7 +47,7 @@ class ArrayStack<T> : Stack<T> {
 
     private fun copy(A: Array<StackElement<T>>, sizeOperator: (Int) -> Int): Array<StackElement<T>> {
         val newSize = sizeOperator.invoke(A.size)
-        val b = Array<StackElement<T>>(newSize) {_ -> StackElement(null)}
+        val b = Array<StackElement<T>>(newSize) { StackElement(null) }
         for (i in 0 until minimum(A.size, newSize)) {
             b[i] = A[i]
         }
