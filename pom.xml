@@ -9,9 +9,8 @@
   <name>kotlin-clrs</name>
 
   <properties>
-    <kotlin.version>1.2.51</kotlin.version>
+    <kotlin.version>1.3.11</kotlin.version>
   </properties>
-
 
   <dependencies>
     <dependency>
@@ -19,11 +18,17 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-junit</artifactId>
-      <version>2.0.0.0</version>
+      <artifactId>hamcrest</artifactId>
+      <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -34,19 +39,21 @@
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
       <version>${kotlin.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-test</artifactId>
+      <artifactId>kotlin-test-junit</artifactId>
       <version>${kotlin.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
-    <plugins>
+      <sourceDirectory>src/main/kotlin</sourceDirectory>
+      <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+      <plugins>
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
@@ -58,11 +65,6 @@
             <goals>
               <goal>compile</goal>
             </goals>
-            <configuration>
-              <sourceDirs>
-                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-              </sourceDirs>
-            </configuration>
           </execution>
           <execution>
             <id>test-compile</id>
@@ -70,15 +72,13 @@
             <goals>
               <goal>test-compile</goal>
             </goals>
-            <configuration>
-              <sourceDirs>
-                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-              </sourceDirs>
-            </configuration>
           </execution>
         </executions>
         <configuration>
           <jvmTarget>1.8</jvmTarget>
+          <args>
+            <arg>-Xallow-result-return-type</arg>
+          </args>
         </configuration>
       </plugin>
       <plugin>
