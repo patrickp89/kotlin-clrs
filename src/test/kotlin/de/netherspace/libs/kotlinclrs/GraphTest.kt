@@ -73,12 +73,9 @@ class GraphTest {
         })
         assertThat(additionResult.isSuccess, Is(true))
 
-        val contains = g.contains("01")
-        assertThat(contains.isSuccess, Is(true))
-
-        val v = contains.getOrNull()
-        assertThat(v, Is(not(nullValue())))
-        assertThat(v?.value, Is("01"))
+        val vertexOne = g.get("01")
+        assertThat(vertexOne, Is(not(nullValue())))
+        assertThat(vertexOne?.value, Is("01"))
     }
 
 }

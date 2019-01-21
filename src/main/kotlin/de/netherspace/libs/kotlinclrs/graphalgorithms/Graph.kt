@@ -9,7 +9,6 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
 
     private val vertices = mutableMapOf<T, Vertex<T>>()
     private var g: Array<Array<Edge<T>?>> = Array(initialVertexCount) { arrayOfNulls<Edge<T>?>(initialVertexCount) }
-    //    private var g: MutableMap<T, MutableMap<T, Edge<T>>> = mutableMapOf() // TODO: erase!
     private val vertexCounter = AtomicInteger(0)
     private val indices: MutableMap<T, Int> = mutableMapOf()
 
@@ -31,65 +30,62 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
     fun addVertex(x: T, neighbours: List<Pair<T, Int>>): Result<Vertex<T>> {
         println("adding vertex: '$x' ...")
 
-        // check whether a vertex with the same value already exists (the hash map
-        // allows for lookups in O(1)):
-        val v: Vertex<T> = getOrCreateVertex(x)
+        // get old vertex or create new one:
+        getOrCreateVertex(x).fold({ v ->
 
-        // check whether a neighbouring vertex already exists and its edge weight differs:
-        val differingEdges = neighbours
-                .filter { g.containsKey(it.first) }
-                //###################################################
-                .toList()
-        differingEdges
-                .forEach { println(" ********>> $it") } // TODO: erase!
-        differingEdges
-                //###################################################
-                .map { it ->
-                    Pair<Int, Int>(indices[it.first]
-                            ?: return Result.failure(Exception("Could not find index '${it.first}'!"))
-                            , it.second)
+            // check whether an edge to one of the neighbouring vertices already exists and its edge weight differs:
+            checkForDifferingEdgeWeights(v, neighbours).fold({ differingEdgeWeights ->
+                if (differingEdgeWeights) {
+                    return Result.failure(Exception("Some edge weights differ for given neighbouring vertices!"))
                 }
-                .map { it -> Pair<Array<Edge<T>?>, Int>(g[it.first], it.second) }
-                // .filter { it.second != g[it.first][x].weight }!
-                .toList()
-
-        if (!differingEdges.isEmpty()) {
-            val m = "Some edge weights differ for given neighbouring vertices!"
-            println(m)
-            differingEdges.forEach { println("The edge weight differs for $x -> ${it.first}!") }
-            return Result.failure(IllegalArgumentException(m))
-        }
-
-
-        // filter duplicate neighbours:
-        val distinctNeighbours = neighbours
-                .distinctBy { listOf(it.first, it.second) }
-                .toList()
-
-        val distinctEdges = distinctNeighbours
-                .map { p -> Edge(v, Vertex(p.first), p.second) }
-                .toList()
-
-        println("   distinctEdges.size = ${distinctEdges.size}") // TODO: erase!
-
-        println("   distinctEdges.forEach { ... }") // TODO: erase!
-        // place each edge in our matrix:
-        distinctEdges.forEach {
-            println("   --> endpoint1 = " + it.endpoint1.value + "  endpoint2 = " + it.endpoint2.value) // TODO: erase!
-            val persistenceResult = persistEdge(it)
-            persistenceResult.fold({ v ->
-                println("The edge's indices are: ${v.first}, ${v.second}")
             }, { e ->
                 return Result.failure(e)
             })
 
-            // keep the symmetry:
+            // filter duplicate neighbours:
+            val distinctNeighbours = neighbours
+                    .distinctBy { listOf(it.first, it.second) }
+                    .toList()
+
+            val distinctEdges = distinctNeighbours
+                    .map { p -> Edge(v, Vertex(p.first), p.second) }
+                    .toList()
+
+            println("   distinctEdges.size = ${distinctEdges.size}") // TODO: erase!
+
+            println("   distinctEdges.forEach { ... }") // TODO: erase!
+            // place each edge in our matrix:
+            distinctEdges.forEach {
+                println("   --> endpoint1 = " + it.endpoint1.value + "  endpoint2 = " + it.endpoint2.value) // TODO: erase!
+                persistEdge(it).fold({ v ->
+                    println("The edge's indices are: ${v.first}, ${v.second}")
+                }, { e ->
+                    return Result.failure(e)
+                })
+
+                // keep the symmetry:
 //        distinctEdges.forEach { g[it.endpoint2.value][it.endpoint1.value] = it }
 
-            // TODO: the array must contain ALL vertices!
-            // TODO: all previous array rows need the new column!
+            }
+            return Result.success(v)
+        }, { e ->
+            return Result.failure(e)
+        })
+    }
+
+
+    /**
+     * Looks up a vertex for a given value.
+     *
+     * @param x the value
+     * @return the vertex or null
+     */
+    fun get(x: T): Vertex<T>? {
+        return if (!g.containsKey(x) && vertices[x] == null) {
+            null
+        } else {
+            vertices[x]
         }
-        return Result.success(v)
     }
 
 
@@ -115,17 +111,40 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
 
 
     /**
-     * Looks up a vertex for a given value.
+     * Checks whether a neighbouring vertex already exists and its edge weight differs.
      *
-     * @param x the value
-     * @return a Result wrapping either the vertex, or a failure if it is not part of the graph
+     * @param v the new vertex
+     * @param neighbours its neighbours
+     * @return a Result containing true if a differing edge weight was found, false otherwise
      */
-    fun get(x: T): Vertex<T>? {
-        println("g.containsKey(x) = " + g.containsKey(x)) // TODO: erase!
-        return if (!g.containsKey(x)) {
-            null
+    private fun checkForDifferingEdgeWeights(v: Vertex<T>, neighbours: List<Pair<T, Int>>): Result<Boolean> {
+        val i: Int = indices[v.value] ?: return Result.success(false)
+        val differingEdges = neighbours
+                .filter { g.containsKey(it.first) }
+        //###################################################
+                .toList()
+        differingEdges
+                .forEach { println(" ********>> $it") } // TODO: erase!
+        differingEdges
+        //###################################################
+                .map { it ->
+                    Pair<Int, Int>(indices[it.first]
+                            ?: return Result.failure(Exception("Could not find index '${it.first}'!"))
+                            , it.second)
+                }
+                //.map { it -> Pair<Array<Edge<T>?>, Int>(g[it.first], it.second) }
+                // .filter { it.second != g[it.first][x].weight }
+                .filter { g[i][it.first] != null }
+                .filter { g[i][it.first]?.weight != it.second }
+                .toList()
+
+        return if (!differingEdges.isEmpty()) {
+            val m = "Some edge weights differ for given neighbouring vertices!"
+            println(m)
+            differingEdges.forEach { println("The edge weight differs for ${v.value} -> ${it.first}!") }
+            Result.success(true)
         } else {
-            vertices[x]
+            Result.success(false)
         }
     }
 
