@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class SinglyLinkedList<T> : List<T> {
 
-    private val head: Node<T> = Node(null, -1)
-    private val tail: Node<T> = Node(null, -1)
+    private val head = Node<T>(null, -1)
+    private val tail = Node<T>(null, -1)
     private val size = AtomicInteger(0)
 
     constructor() {

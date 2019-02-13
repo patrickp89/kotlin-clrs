@@ -1,13 +1,11 @@
-package de.netherspace.libs.kotlinclrs
+package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-import de.netherspace.libs.kotlinclrs.elementarydatastructures.*
-import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
-import org.junit.Test
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyOrNullString
+import org.junit.Test
 import org.hamcrest.Matchers.`is` as Is
 
-class ElementaryDataStructuresTest {
+class LinkedListTest {
 
     @Test
     fun testSinglyLinkedList() {
@@ -19,26 +17,6 @@ class ElementaryDataStructuresTest {
     fun testDoublyLinkedList() {
         val list = DoublyLinkedList<String>()
         assertThat(testListImplementation(list), Is(true))
-    }
-
-    @Test
-    fun testArrayStack() {
-        val stack: Stack<String> = ArrayStack()
-        assertThat(stack.isEmpty(), Is(true))
-
-        assertThat(stack.push("eins"), Is(true))
-        assertThat(stack.isEmpty(), Is(false))
-
-        assertThat(stack.pop(), Is("eins"))
-        assertThat(stack.isEmpty(), Is(true))
-
-        for (i in 1..15) {
-            assertThat(stack.push("test $i"), Is(true))
-        }
-        for (i in 15 downTo 1) {
-            assertThat(stack.pop(), Is("test $i"))
-        }
-        assertThat(stack.isEmpty(), Is(true))
     }
 
     private fun testListImplementation(list: List<String>): Boolean {
@@ -62,4 +40,5 @@ class ElementaryDataStructuresTest {
 
         return true
     }
+
 }

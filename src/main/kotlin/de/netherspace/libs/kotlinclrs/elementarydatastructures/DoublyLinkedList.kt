@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class DoublyLinkedList<T> : List<T> {
 
-    private val head: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
-    private val tail: DoublyLinkedNode<T> = DoublyLinkedNode(null, -1)
+    private val head = DoublyLinkedNode<T>(null, -1)
+    private val tail = DoublyLinkedNode<T>(null, -1)
     private val size = AtomicInteger(0)
 
     constructor() {
