@@ -10,22 +10,32 @@ class LinkedListTest {
     @Test
     fun testSinglyLinkedList() {
         val list = SinglyLinkedList<String>()
+        assertThatListInsertSucceeded(list, "eins", 1L)
+        assertThatListInsertSucceeded(list, "zwei", 2L)
+        assertThatListInsertSucceeded(list, "drei", 3L)
+        assertThatListInsertSucceeded(list, "zwei-zwei", 2L)
         assertThat(testListImplementation(list), Is(true))
     }
 
     @Test
     fun testDoublyLinkedList() {
         val list = DoublyLinkedList<String>()
+        assertThatListInsertSucceeded(list, "eins", 1L)
+        assertThatListInsertSucceeded(list, "zwei", 2L)
+        assertThatListInsertSucceeded(list, "drei", 3L)
+        assertThatListInsertSucceeded(list, "zwei-zwei", 2L)
         assertThat(testListImplementation(list), Is(true))
     }
 
-    private fun testListImplementation(list: List<String>): Boolean {
-        assertThat(list.size(), Is(0))
+    private fun assertThatListInsertSucceeded(list: SinglyLinkedList<String>, x: String, k: Long) {
+        assertThat(list.insert(x, k).element, Is(x))
+    }
 
-        assertThat(list.insert("eins", 1L), Is(true))
-        assertThat(list.insert("zwei", 2L), Is(true))
-        assertThat(list.insert("drei", 3L), Is(true))
-        assertThat(list.insert("zwei-zwei", 2L), Is(true))
+    private fun assertThatListInsertSucceeded(list: DoublyLinkedList<String>, x: String, k: Long) {
+        assertThat(list.insert(x, k).element, Is(x))
+    }
+
+    private fun testListImplementation(list: List<String>): Boolean {
         assertThat(list.size(), Is(4))
 
         assertThat(list.search(3L), Is("drei"))

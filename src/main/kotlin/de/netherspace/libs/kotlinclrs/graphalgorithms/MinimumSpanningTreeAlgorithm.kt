@@ -6,8 +6,8 @@ interface MinimumSpanningTreeAlgorithm {
      * Computes a MST for the given graph g.
      *
      * @param g the given graph
-     * @return the MST
+     * @return a Result containing the MST
      */
-    fun <T> findMinimumSpanningTree(g: Graph<T>) : Graph<T>
+    fun <T> findMinimumSpanningTree(g: Graph<T>) : Result<Graph<T>>
 
 }

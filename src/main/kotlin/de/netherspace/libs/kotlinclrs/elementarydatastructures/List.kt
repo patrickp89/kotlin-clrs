@@ -4,10 +4,14 @@ interface List<T> {
 
     fun search(k: Long) : T?
 
-    fun insert(x: T, k: Long) : Boolean
+    fun insert(x: T, k: Long) : Node
 
     fun delete(k: Long) : T?
 
     fun size() : Int
+
+}
+
+abstract class Node {
 
 }

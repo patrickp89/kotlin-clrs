@@ -1,33 +1,41 @@
 package de.netherspace.libs.kotlinclrs.advanceddatastructures
 
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.Node
 import java.util.concurrent.atomic.AtomicInteger
 
 class DisjointSet<T> {
 
-    private val sets = mutableListOf<DisjointSetLinkedList<T>>()
+    private val sets = mutableMapOf<T, DisjointSetNode<T>>()
 
-    fun makeSet(x: T) : DisjointSetLinkedList<T> {
+    fun makeSet(x: T): DisjointSetNode<T> {
         val set = DisjointSetLinkedList<T>()
-        set.insert(x, 999) // TODO: key is not necessary for the DS impl.?!
-        sets.add(set)
-        return set
+        val node = set.insert(x, 0L)
+        sets[x] = node
+        return node
     }
 
     fun union(x: T, y: T) {
         TODO("not implemented")
     }
 
-    fun findSet(x: T): T {
-        return x
+    /**
+     * Returns the representative of this set.
+     *
+     * @param x the element of the set
+     * @return its representative
+     */
+    fun findSet(x: T): DisjointSetNode<T>? {
+        val set = sets[x]
+        return set?.representative
     }
 
 }
 
-class DisjointSetLinkedList<T> : List<T> {
+class DisjointSetLinkedList<U> : List<U> {
 
-    private val head = DisjointSetdNode<T> (null, -1)
-    private val tail = DisjointSetdNode<T> (null, -1)
+    private val head = DisjointSetNode<U>(null, -1)
+    private val tail = DisjointSetNode<U>(null, -1)
     private val size = AtomicInteger(0)
 
     constructor() {
@@ -35,13 +43,13 @@ class DisjointSetLinkedList<T> : List<T> {
         tail.pred = head
     }
 
-    override fun search(k: Long): T? {
+    override fun search(k: Long): U? {
         val x = searchNode(k) ?: return null
         return x.element
     }
 
-    override fun insert(x: T, k: Long): Boolean {
-        val newNode = DisjointSetdNode(x, k)
+    override fun insert(x: U, k: Long): DisjointSetNode<U> {
+        val newNode = DisjointSetNode(x, k)
         val y = head.next
         head.next = newNode
         newNode.next = y
@@ -49,10 +57,10 @@ class DisjointSetLinkedList<T> : List<T> {
         newNode.pred = head
         size.incrementAndGet()
         newNode.representative = head
-        return true
+        return newNode
     }
 
-    override fun delete(k: Long): T? {
+    override fun delete(k: Long): U? {
         val x = searchNode(k) ?: return null
         val p = x.pred
         p.next = x.next
@@ -65,7 +73,7 @@ class DisjointSetLinkedList<T> : List<T> {
         return size.get()
     }
 
-    private fun searchNode(k: Long): DisjointSetdNode<T>? {
+    private fun searchNode(k: Long): DisjointSetNode<U>? {
         var x = head.next
         while (x !== tail && x.key != k) {
             x = x.next
@@ -77,12 +85,12 @@ class DisjointSetLinkedList<T> : List<T> {
         }
     }
 
-    class DisjointSetdNode<T>(e: T?, k: Long) {
-        val element = e
-        val key = k
-        var next = this
-        var pred = this
-        var representative = this
-    }
+}
 
+class DisjointSetNode<V>(e: V?, k: Long) : Node() {
+    val element = e
+    val key = k
+    var next = this
+    var pred = this
+    var representative = this
 }

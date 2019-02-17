@@ -3,14 +3,12 @@ package de.netherspace.libs.kotlinclrs
 import de.netherspace.libs.kotlinclrs.graphalgorithms.Graph
 import de.netherspace.libs.kotlinclrs.graphalgorithms.KruskalMST
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Ignore
-import org.hamcrest.Matchers.`is` as Is
 import org.junit.Test
+import org.hamcrest.Matchers.`is` as Is
 
 class MstAlgorithmsTest {
 
     @Test
-    @Ignore
     fun testKruskal() {
         val kruskal = KruskalMST()
         val g = Graph<String>(5)

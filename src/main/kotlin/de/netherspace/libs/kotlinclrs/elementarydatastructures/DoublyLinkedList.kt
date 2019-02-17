@@ -18,7 +18,7 @@ class DoublyLinkedList<T> : List<T> {
         return x.element
     }
 
-    override fun insert(x: T, k: Long): Boolean {
+    override fun insert(x: T, k: Long): DoublyLinkedNode<T> {
         val newNode = DoublyLinkedNode(x, k)
         val y = head.next
         head.next = newNode
@@ -26,7 +26,7 @@ class DoublyLinkedList<T> : List<T> {
         y.pred = newNode
         newNode.pred = head
         size.incrementAndGet()
-        return true
+        return newNode
     }
 
     override fun delete(k: Long): T? {
@@ -54,7 +54,7 @@ class DoublyLinkedList<T> : List<T> {
         }
     }
 
-    class DoublyLinkedNode<T>(e: T?, k: Long) {
+    class DoublyLinkedNode<U>(e: U?, k: Long) : Node() {
         val element = e
         val key = k
         var next = this

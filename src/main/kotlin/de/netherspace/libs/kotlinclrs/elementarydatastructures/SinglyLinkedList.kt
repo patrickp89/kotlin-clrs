@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class SinglyLinkedList<T> : List<T> {
 
-    private val head = Node<T>(null, -1)
-    private val tail = Node<T>(null, -1)
+    private val head = SinglyLinkedNode<T>(null, -1)
+    private val tail = SinglyLinkedNode<T>(null, -1)
     private val size = AtomicInteger(0)
 
     constructor() {
@@ -17,13 +17,13 @@ class SinglyLinkedList<T> : List<T> {
         return p.next.element
     }
 
-    override fun insert(x: T, k: Long): Boolean {
-        val newNode = Node(x, k)
+    override fun insert(x: T, k: Long): SinglyLinkedNode<T> {
+        val newNode = SinglyLinkedNode(x, k)
         val y = head.next
         head.next = newNode
         newNode.next = y
         size.incrementAndGet()
-        return true
+        return newNode
     }
 
     override fun delete(k: Long): T? {
@@ -39,7 +39,7 @@ class SinglyLinkedList<T> : List<T> {
         return size.get()
     }
 
-    private fun searchPredecessor(k: Long): Node<T>? {
+    private fun searchPredecessor(k: Long): SinglyLinkedNode<T>? {
         var p = head
         var x = head.next
         while (x !== tail && x.key != k) {
@@ -53,7 +53,7 @@ class SinglyLinkedList<T> : List<T> {
         }
     }
 
-    class Node<T>(e: T?, k: Long) {
+    class SinglyLinkedNode<U>(e: U?, k: Long) : Node() {
         val element = e
         val key = k
         var next = this
