@@ -13,5 +13,8 @@ Sorting algorithms:
 * [Mergesort](src/main/kotlin/de/netherspace/libs/kotlinclrs/sorting/MergeSort.kt)
 * [Quicksort](src/main/kotlin/de/netherspace/libs/kotlinclrs/sorting/QuickSort.kt)
 
-Graph implementations and graph algorithms:
-* [Undirected Graph](src/main/kotlin/de/netherspace/libs/kotlinclrs/graphalgorithms/Graph.kt)
+Advanced data structures:
+* [Disjoint Set](src/main/kotlin/de/netherspace/libs/kotlinclrs/advanceddatastructures/DisjointSet.kt)
+
+Ggraph algorithms:
+* [Kruskal's Algorithm](src/main/kotlin/de/netherspace/libs/kotlinclrs/graphalgorithms/KruskalMST.kt) (Minimum Spanning Tree)

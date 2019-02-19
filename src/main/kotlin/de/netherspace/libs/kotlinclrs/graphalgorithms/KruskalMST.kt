@@ -11,11 +11,6 @@ class KruskalMST : MinimumSpanningTreeAlgorithm {
         g.vertices().forEach {
             ds.makeSet(it)
         }
-//        val disjointSetElements: List<DisjointSetNode<Graph.Vertex<T>>> = g.vertices()
-//                .map { ds.makeSet(it) }
-//                .toList()
-//        val dsElements: Map<Graph.Vertex<T>, DisjointSetNode<Graph.Vertex<T>>> = g.vertices()
-//                .associateBy({ it }, { ds.makeSet(it) })
 
         val sortedEdges = g.edges()
                 .asSequence()
@@ -23,15 +18,16 @@ class KruskalMST : MinimumSpanningTreeAlgorithm {
                 .toList()
 
         sortedEdges.forEach {
-//            val endpoint1: DisjointSetNode<Graph.Vertex<T>> = dsElements[it.endpoint1]
-//                    ?: return Result.failure(Exception("Error: did not call makeSet() for '${it.endpoint1}'!"))
-//            val endpoint2: DisjointSetNode<Graph.Vertex<T>> = dsElements[it.endpoint2]
-//                    ?: return Result.failure(Exception("Error: did not call makeSet() for '${it.endpoint2}'!"))
 
             if (ds.findSet(it.endpoint1) != ds.findSet(it.endpoint2)) {
                 println("The endpoints are not inside the same set! --> union(u,v)") // TODO: erase!
                 a.add(it)
-                ds.union(it.endpoint1, it.endpoint2)
+                ds.union(it.endpoint1, it.endpoint2).fold({ u ->
+                    println("United ${it.endpoint1} and ${it.endpoint2}, the new representative is $u")
+                }, { e ->
+                    // an error occurred, return a Failure:
+                    return Result.failure(e)
+                })
             }
         }
         // TODO: ...

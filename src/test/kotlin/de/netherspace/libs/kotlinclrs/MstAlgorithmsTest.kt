@@ -3,12 +3,14 @@ package de.netherspace.libs.kotlinclrs
 import de.netherspace.libs.kotlinclrs.graphalgorithms.Graph
 import de.netherspace.libs.kotlinclrs.graphalgorithms.KruskalMST
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import org.hamcrest.Matchers.`is` as Is
 
 class MstAlgorithmsTest {
 
     @Test
+    @Ignore
     fun testKruskal() {
         val kruskal = KruskalMST()
         val g = Graph<String>(5)
@@ -20,7 +22,12 @@ class MstAlgorithmsTest {
         assertThat(v2.isSuccess, Is(true))
 
         val mst = kruskal.findMinimumSpanningTree(g)
-        assertThat(true, Is(true))
+        mst.fold({ t ->
+            println(" The minimum spanning tree is: $t")
+        }, { e ->
+            println("Exception was: $e")
+        })
+        assertThat(mst.isSuccess, Is(true))
     }
 
 }

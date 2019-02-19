@@ -2,41 +2,92 @@ package de.netherspace.libs.kotlinclrs.advanceddatastructures
 
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.List
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.Node
-import java.util.concurrent.atomic.AtomicInteger
 
+/**
+ * Tracks the membership of elements to a set of disjoint (sub)sets.
+ */
 class DisjointSet<T> {
 
-    private val sets = mutableMapOf<T, DisjointSetNode<T>>()
+    // maps an element to its wrapped counterpart:
+    private val setElements = mutableMapOf<T, DisjointSetNode<T>>()
 
+    // maps an element to its set:
+    private val sets = mutableMapOf<T, DisjointSetLinkedList<T>>()
+
+
+    /**
+     * Creates a new set, having x as its only element.
+     *
+     * @param x the element contained in the new set
+     * @return the newly created node
+     */
     fun makeSet(x: T): DisjointSetNode<T> {
         val set = DisjointSetLinkedList<T>()
         val node = set.insert(x, 0L)
-        sets[x] = node
+        sets[x] = set
+        setElements[x] = node
         return node
     }
 
-    fun union(x: T, y: T) {
-        TODO("not implemented")
-    }
 
     /**
-     * Returns the representative of this set.
+     * Naively unites the two sets, x and y belong to.
      *
-     * @param x the element of the set
-     * @return its representative
+     * @param x the element of the first set
+     * @param y the element of the second set
+     * @return the representative of the united set
      */
-    fun findSet(x: T): DisjointSetNode<T>? {
-        val set = sets[x]
-        return set?.representative
+    fun union(x: T, y: T): Result<DisjointSetNode<T>> {
+        val firstSet: DisjointSetLinkedList<T> = sets[x]
+                ?: return Result.failure(Exception("Could not find a set for '$x'!"))
+        val secondSet: DisjointSetLinkedList<T> = sets[y]
+                ?: return Result.failure(Exception("Could not find a set for '$x'!"))
+
+        if (firstSet == secondSet) {
+            return Result.failure(Exception("x and y already belong to the same set!"))
+        }
+
+        // attach the second set's list to end of the first one's:
+        val lastElementOfFirstSet = firstSet.tail.pred // tail itself is a dummy!
+        val firstElementOfSecondSet = secondSet.head.next// head itself is a dummy!
+        lastElementOfFirstSet.next = firstElementOfSecondSet
+        firstElementOfSecondSet.pred = lastElementOfFirstSet
+
+        // change the representative for all elements in the second set:
+        var z = secondSet.head
+        while (z !== secondSet.tail) {
+            z.representative = lastElementOfFirstSet.representative
+            z = z.next
+        }
+
+        // get rid of the obsolete dummies:
+        firstSet.tail = secondSet.tail
+        secondSet.head.next = secondSet.head
+
+        // adjust the global mapping:
+        sets[y] = firstSet
+
+        return Result.success(firstElementOfSecondSet.representative)
+    }
+
+
+    /**
+     * Returns the representative of the set which x belongs to.
+     *
+     * @param x some element
+     * @return its representative or null (if no set has been created for x)
+     */
+    fun findSet(x: T): DisjointSetNode<T>? { // TODO: Result instead of null!
+        return setElements[x]?.representative
     }
 
 }
 
+
 class DisjointSetLinkedList<U> : List<U> {
 
-    private val head = DisjointSetNode<U>(null, -1)
-    private val tail = DisjointSetNode<U>(null, -1)
-    private val size = AtomicInteger(0)
+    var head = DisjointSetNode<U>(null, -1)
+    var tail = DisjointSetNode<U>(null, -1)
 
     constructor() {
         head.next = tail
@@ -55,7 +106,6 @@ class DisjointSetLinkedList<U> : List<U> {
         newNode.next = y
         y.pred = newNode
         newNode.pred = head
-        size.incrementAndGet()
         newNode.representative = head
         return newNode
     }
@@ -65,12 +115,17 @@ class DisjointSetLinkedList<U> : List<U> {
         val p = x.pred
         p.next = x.next
         p.next.pred = p
-        size.decrementAndGet()
         return x.element
     }
 
     override fun size(): Int {
-        return size.get()
+        var x = head.next
+        var i = 0
+        while (x !== tail) {
+            x = x.next
+            i++
+        }
+        return i
     }
 
     private fun searchNode(k: Long): DisjointSetNode<U>? {
