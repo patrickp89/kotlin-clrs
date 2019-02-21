@@ -1,6 +1,5 @@
-package de.netherspace.libs.kotlinclrs
+package de.netherspace.libs.kotlinclrs.graphalgorithms
 
-import de.netherspace.libs.kotlinclrs.graphalgorithms.Graph
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.nullValue
@@ -11,7 +10,6 @@ class GraphTest {
 
     @Test
     fun testInsertMultipleEdges() {
-        println("\n\n\n=== testInsertDuplicate ===")
         val g = Graph<String>(5)
 
         // the edges differ, therefore these calls should succeed!
@@ -26,7 +24,6 @@ class GraphTest {
 
     @Test
     fun testInsertLoop() {
-        println("\n\n\n=== testInsertLoop ===")
         val g = Graph<String>(3)
 
         // vertices must be able to connect an edge with itself (i.e. a loop):
@@ -49,19 +46,27 @@ class GraphTest {
 
     @Test
     fun testInsertDifferentEdgeWeight() {
-        println("\n\n\n=== testInsertDifferentEdgeWeight ===")
         val g = Graph<String>(3)
-
         val v1 = g.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
         assertThat(v1.isSuccess, Is(true))
 
         val v2 = g.addVertex("02", listOf(Pair("01", 123), Pair("02", 456)))
         assertThat(v2.isSuccess, Is(false))
+
+
+        val g2 = Graph<String>(5)
+        val v21 = g2.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
+        assertThat(v21.isSuccess, Is(true))
+
+        val v22 = g2.addVertex("03", listOf(Pair("04", 21), Pair("05", 12)))
+        assertThat(v22.isSuccess, Is(true))
+
+        val v23 = g2.addVertex("02", listOf(Pair("04", 11)))
+        assertThat(v23.isSuccess, Is(true))
     }
 
     @Test
     fun testGraphContainsVertex() {
-        println("\n\n\n=== testGraphContainsVertex ===")
         val g = Graph<String>(3)
 
         val additionResult = g.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
@@ -79,7 +84,6 @@ class GraphTest {
 
     @Test
     fun testGetAllVertices() {
-        println("\n\n\n=== testGetAllVertices ===")
         val g = Graph<String>(3)
         g.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
 
@@ -89,7 +93,6 @@ class GraphTest {
 
     @Test
     fun testGetAllEdges() {
-        println("\n\n\n=== testGetAllEdges ===")
         val g = Graph<String>(3)
         g.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
 

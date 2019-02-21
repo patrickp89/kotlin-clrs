@@ -68,7 +68,6 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                     return Result.failure(Exception("Some edge weights differ for given neighbouring vertices!"))
                 }
             }, { e ->
-                // an error occurred, return a Failure:
                 return Result.failure(e)
             })
 
@@ -83,16 +82,11 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
 
             // place each edge in our matrix:
             distinctEdges.forEach {
-//                println("   --> endpoint1 = " + it.endpoint1.value + "  endpoint2 = " + it.endpoint2.value) // TODO: erase!
                 persistEdge(it).fold({ v ->
                     println("The edge's indices are: ${v.first}, ${v.second}")
                 }, { e ->
-                    // an error occurred, return a Failure:
                     return Result.failure(e)
                 })
-
-                // keep the symmetry:
-                // distinctEdges.forEach { g[it.endpoint2.value][it.endpoint1.value] = it }
 
             }
             return Result.success(v)
@@ -147,29 +141,28 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
      */
     private fun checkForDifferingEdgeWeights(v: Vertex<T>, neighbours: List<Pair<T, Int>>): Result<Boolean> {
         val i: Int = indices[v.value] ?: return Result.success(false)
-        val differingEdges = neighbours
+
+        val neighbourIndices = neighbours
                 .filter { g.containsKey(it.first) }
-        //###################################################
-                .toList()
-        differingEdges
-                .forEach { println(" ********>> $it") } // TODO: erase!
-        differingEdges
-        //###################################################
-                .map { it ->
-                    Pair<Int, Int>(indices[it.first]
-                            ?: return Result.failure(Exception("Could not find index '${it.first}'!"))
+                // mapTo: Pair<Pair<NeighbouringVertex, IndexOfNeighbouringVertex> , EdgeWeight>
+                .map {
+                    Pair(Pair(it.first, indices[it.first]
+                            ?: return Result.failure(Exception("Could not find index '${it.first}'!")))
                             , it.second)
                 }
-                //.map { it -> Pair<Array<Edge<T>?>, Int>(g[it.first], it.second) }
-                // .filter { it.second != g[it.first][x].weight }
-                .filter { g[i][it.first] != null }
-                .filter { g[i][it.first]?.weight != it.second }
                 .toList()
 
-        return if (!differingEdges.isEmpty()) {
-            val m = "Some edge weights differ for given neighbouring vertices!"
-            println(m)
-            differingEdges.forEach { println("The edge weight differs for ${v.value} -> ${it.first}!") }
+        val edgesWithDifferingWeights = neighbourIndices
+                .filter { g[i][it.first.second] != null }
+                .filter { g[i][it.first.second]?.weight != it.second }
+                .toList()
+
+        return if (!edgesWithDifferingWeights.isEmpty()) {
+            println("Some edge weights differ for given neighbouring vertices!")
+            edgesWithDifferingWeights
+                    .forEach {
+                        println("  -> the edge weight differs for ${v.value} -> ${it.first.first}, weight ${it.second}!")
+                    }
             Result.success(true)
         } else {
             Result.success(false)
@@ -181,7 +174,7 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
      * Persists a given edge.
      *
      * @param edge the edge
-     * @return a Result containing the endpoints indices or a Failure
+     * @return a Result containing the endpoints indices
      */
     private fun persistEdge(edge: Edge<T>): Result<Pair<Int, Int>> {
         // do we already have indices for these endpoints?
@@ -270,27 +263,26 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                 }
 
                 // persist the actual edge:
-                println("   g[$i][$k] = $edge")
-                g[i][k] = edge
-
-                // persist the edge in a separate list for faster lookups:
-                edges.add(edge)
-
-                // return the existing indices:
-                Result.success(Pair(i, k)) // TODO: this line and the above 6 (the whole "else" branch) should be extracted for reuse!
+                persistEdgeSymmetrically(i, k, edge)
             } else {
 //                println("   the adjacent vertex is already persisted") // TODO: erase!
                 // persist the actual edge:
-                println("   g[$i][$j] = $edge")
-                g[i][j] = edge
-
-                // persist the edge in a separate list for faster lookups:
-                edges.add(edge)
-
-                // return the existing indices:
-                Result.success(Pair(i, j)) // TODO: this line and the above 6 (the whole "else" branch) should be extracted for reuse!
+                persistEdgeSymmetrically(i, j, edge)
             }
         }
+    }
+
+    private fun persistEdgeSymmetrically(i: Int, k: Int, edge: Edge<T>): Result<Pair<Int, Int>> {
+        println("   g[$i][$k] = $edge") // TODO: erase!
+        g[i][k] = edge
+        println("   g[$k][$i] = $edge") // TODO: erase!
+        g[k][i] = edge
+
+        // persist the edge in a separate list for faster lookups:
+        edges.add(edge)
+
+        // return the existing indices:
+        return Result.success(Pair(i, k))
     }
 
 
