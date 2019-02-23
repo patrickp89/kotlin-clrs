@@ -32,7 +32,6 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
     fun vertices(): List<Vertex<T>> {
         return vertices
                 .values
-                .distinct()
                 .toList()
     }
 
@@ -76,9 +75,13 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                     .distinctBy { listOf(it.first, it.second) }
                     .toList()
 
+            // create edge objects for all distinct neighbours:
             val distinctEdges = distinctNeighbours
-                    .map { p -> Edge(v, Vertex(p.first), p.second) }
+                    .map { Edge(v, vertices[it.first] ?: Vertex(it.first), it.second) }
                     .toList()
+            //################################################
+//            distinctEdges.forEach { println(" ~~> $it : ${it.endpoint1} -> ${it.endpoint2}") } // TODO: erase!
+            //################################################
 
             // place each edge in our matrix:
             distinctEdges.forEach {
@@ -87,8 +90,11 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                 }, { e ->
                     return Result.failure(e)
                 })
-
             }
+
+            //################################################
+//            println(" RETURNING vertex v == $v") // TODO: erase!
+            //################################################
             return Result.success(v)
         }, { e ->
             return Result.failure(e)
@@ -177,13 +183,14 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
      * @return a Result containing the endpoints indices
      */
     private fun persistEdge(edge: Edge<T>): Result<Pair<Int, Int>> {
+        val endpointValue1 = edge.endpoint1.value
+        val endpointValue2 = edge.endpoint2.value
+
         // do we already have indices for these endpoints?
-        val indicesExist = indices.containsKey(edge.endpoint1.value) && indices.containsKey(edge.endpoint2.value)
-//        println("  indicesExist = $indicesExist") // TODO erase!
+        val indicesExist = indices.containsKey(endpointValue1) && indices.containsKey(endpointValue2)
 
         // does our graph already contain these endpoints?
-        val graphContainsEndpoints = g.containsKey(edge.endpoint1.value) && g.containsKey(edge.endpoint2.value)
-//        println("  graphContainsEndpoints = $graphContainsEndpoints") // TODO erase!
+        val graphContainsEndpoints = g.containsKey(endpointValue1) && g.containsKey(endpointValue2)
 
         if (!indicesExist && graphContainsEndpoints) {
             return Result.failure(Exception("Something went wrong: the graph contains these values"
@@ -195,82 +202,24 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                     + " but I found their indices!"))
         }
 
-        // does our graph already contain these endpoints?
-        if (graphContainsEndpoints) {
-//            println("  if (graphContainsEndpoints) { ... }") // TODO erase!
+        // get or create indices for the two vertices:
+        val i = storeOrGetVertexValueToIndexMapping(endpointValue1)
+                .getOrElse { e -> return Result.failure(e) }
+        val k = storeOrGetVertexValueToIndexMapping(endpointValue2)
+                .getOrElse { e -> return Result.failure(e) }
 
-            // yes! then there must also exist an index for it:
-            if (!indices.contains(edge.endpoint1.value)) { // TODO: was "containsKey" - which is correct?
-//                println("    there is NO index for key '${edge.endpoint1.value}'") // TODO: erase!
-
-                // if there is no index, something went wrong somewhere:
-                val m = "Something went wrong: I couldn't find the array index for '${edge.endpoint1.value}'!"
-                println(m)
-                return Result.failure(Exception(m))
-
-            } else if (!indices.contains(edge.endpoint2.value)) { // TODO: was "containsKey" - which is correct?
-//                println("    there is NO index for key '${edge.endpoint2.value}'") // TODO: erase!
-
-                // if there is no index, something went wrong somewhere:
-                val m = "Something went wrong: I couldn't find the array index for '${edge.endpoint2.value}'!"
-                println(m)
-                return Result.failure(Exception(m))
-
-            } else {
-//                println("    there IS an index for key '${edge.endpoint1.value}': " + indices[edge.endpoint1.value]) // TODO: erase!
-                // we have an index, so store our edge in that column/row:
-                val i = indices[edge.endpoint1.value]
-                        ?: return Result.failure(Exception("Something went wrong: an index was null!"))
-
-                val j = indices[edge.endpoint1.value]
-                        ?: return Result.failure(Exception("Something went wrong: an index was null!"))
-
-                // TODO: where is the "g[i][k] = edge" ?? Not needed here??
-
-                // persist the edge in a separate list for faster lookups:
-                edges.add(edge)
-
-                // return the existing indices:
-                return Result.success(Pair(i, j))
-            }
-
-        } else {
-//            println("  if (graphContainsEndpoints) {} else { ... }") // TODO erase!
-
-            // no, the edge is not part of our graph yet => persist it!
-//            println("   the edge '${edge.endpoint1.value}' / '${edge.endpoint2.value}'"
-//                    + " (${edge.endpoint1} / ${edge.endpoint2}) is not part of our graph yet!") // TODO: erase!
-
-            // get an index for its first endpoint:
-            val i = storeOrGetVertexValueToIndexMapping(edge.endpoint1.value)
-                    .getOrElse { e -> return Result.failure(e) }
-
-            val j = indices[edge.endpoint2.value]
-            return if (j == null) {
-                // the adjacent vertex is not yet persisted!
-//                println("   the adjacent vertex is NOT yet persisted!") // TODO: erase!
-
-                // get an index for this (adjacent) vertex:
-                val k = storeOrGetVertexValueToIndexMapping(edge.endpoint2.value)
-                        .getOrElse { e -> return Result.failure(e) }
-
-                // store both endpoints (if necessary):
-                if (!vertices.containsKey(edge.endpoint1.value)) {
-                    vertices[edge.endpoint1.value] = edge.endpoint2
-                }
-                if (!vertices.containsKey(edge.endpoint2.value)) {
-                    vertices[edge.endpoint2.value] = edge.endpoint2
-                }
-
-                // persist the actual edge:
-                persistEdgeSymmetrically(i, k, edge)
-            } else {
-//                println("   the adjacent vertex is already persisted") // TODO: erase!
-                // persist the actual edge:
-                persistEdgeSymmetrically(i, j, edge)
-            }
+        // store both endpoints (if necessary):
+        if (!vertices.containsKey(endpointValue1)) {
+            vertices[endpointValue1] = edge.endpoint1
         }
+        if (!vertices.containsKey(endpointValue2)) {
+            vertices[endpointValue2] = edge.endpoint2
+        }
+
+        // persist the edge:
+        return persistEdgeSymmetrically(i, k, edge)
     }
+
 
     private fun persistEdgeSymmetrically(i: Int, k: Int, edge: Edge<T>): Result<Pair<Int, Int>> {
         println("   g[$i][$k] = $edge") // TODO: erase!
@@ -316,16 +265,13 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
      * @return true if a corresponding value is in the array, false otherwise
      */
     private fun Array<Array<Edge<T>?>>.containsKey(k: T): Boolean {
-//        println("containsKey($k)") // TODO: erase!
         val matchingEdges = this
                 .flatMap { it.toList() }
                 .filter { it?.endpoint1?.value == k || it?.endpoint2?.value == k }
                 .toList()
-//        matchingEdges.forEach { println(" ~> $it") } // TODO: erase!
         val size = matchingEdges
                 .size
 
-//        println(" ~~>" + (size > 0)) // TODO: erase!
         return size > 0
     }
 
