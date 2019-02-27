@@ -9,7 +9,7 @@ import org.hamcrest.Matchers.`is` as Is
 class GraphTest {
 
     @Test
-    fun testInsertMultipleEdges() {
+    fun testAddMultipleEdges() {
         val g = Graph<String>(5)
 
         // the edges differ, therefore these calls should succeed!
@@ -23,7 +23,7 @@ class GraphTest {
     }
 
     @Test
-    fun testInsertLoop() {
+    fun testAddLoop() {
         val g = Graph<String>(3)
 
         // vertices must be able to connect an edge with itself (i.e. a loop):
@@ -45,24 +45,36 @@ class GraphTest {
     }
 
     @Test
-    fun testInsertDifferentEdgeWeight() {
+    fun testAddDifferentEdgeWeight() {
         val g = Graph<String>(3)
+
         val v1 = g.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
         assertThat(v1.isSuccess, Is(true))
 
         val v2 = g.addVertex("02", listOf(Pair("01", 123), Pair("02", 456)))
         assertThat(v2.isSuccess, Is(false))
+    }
 
-
+    @Test
+    fun testAddVertexThatWasAlreadyAddedAsNeighbour() {
         val g2 = Graph<String>(5)
+
         val v21 = g2.addVertex("01", listOf(Pair("02", 22), Pair("03", 77)))
         assertThat(v21.isSuccess, Is(true))
+        val v2021: Graph.Vertex<String> = g2.vertices()
+                .filter { it.value == "02" }
+                .first()
 
         val v22 = g2.addVertex("03", listOf(Pair("04", 21), Pair("05", 12)))
         assertThat(v22.isSuccess, Is(true))
 
         val v23 = g2.addVertex("02", listOf(Pair("04", 11)))
         assertThat(v23.isSuccess, Is(true))
+
+        // "02" was already added as a neighbour of "01" => addVertex("02") must
+        // return the already existing one:
+        val v2022 = v23.getOrThrow()
+        assertThat(v2022, Is(v2021))
     }
 
     @Test

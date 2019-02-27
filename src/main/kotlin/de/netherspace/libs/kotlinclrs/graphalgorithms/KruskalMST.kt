@@ -2,9 +2,12 @@ package de.netherspace.libs.kotlinclrs.graphalgorithms
 
 import de.netherspace.libs.kotlinclrs.advanceddatastructures.DisjointSet
 
+/**
+ * Kruskal's algorithm for Minimum Spanning Trees.
+ */
 class KruskalMST : MinimumSpanningTreeAlgorithm {
 
-    override fun <T> findMinimumSpanningTree(g: Graph<T>): Result<Graph<T>> {
+    override fun <T> findMinimumSpanningTree(g: Graph<T>): Result<List<Graph.Edge<T>>> {
         val a = mutableListOf<Graph.Edge<T>>()
 
         val ds = DisjointSet<Graph.Vertex<T>>()
@@ -18,21 +21,16 @@ class KruskalMST : MinimumSpanningTreeAlgorithm {
                 .toList()
 
         sortedEdges.forEach {
-
             if (ds.findSet(it.endpoint1) != ds.findSet(it.endpoint2)) {
-                println("The endpoints are not inside the same set! --> union(u,v)") // TODO: erase!
-                a.add(it)
                 ds.union(it.endpoint1, it.endpoint2).fold({ u ->
-                    println("United ${it.endpoint1} and ${it.endpoint2}, the new representative is $u")
+                    a.add(it)
                 }, { e ->
-                    // an error occurred, return a Failure:
                     return Result.failure(e)
                 })
             }
         }
-        // TODO: ...
 
-        return Result.success(g) // TODO: Graph(a) instead!
+        return Result.success(a)
     }
 
 }

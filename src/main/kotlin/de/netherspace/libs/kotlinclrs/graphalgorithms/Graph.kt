@@ -79,9 +79,6 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
             val distinctEdges = distinctNeighbours
                     .map { Edge(v, vertices[it.first] ?: Vertex(it.first), it.second) }
                     .toList()
-            //################################################
-//            distinctEdges.forEach { println(" ~~> $it : ${it.endpoint1} -> ${it.endpoint2}") } // TODO: erase!
-            //################################################
 
             // place each edge in our matrix:
             distinctEdges.forEach {
@@ -92,9 +89,6 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
                 })
             }
 
-            //################################################
-//            println(" RETURNING vertex v == $v") // TODO: erase!
-            //################################################
             return Result.success(v)
         }, { e ->
             return Result.failure(e)
@@ -180,7 +174,7 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
      * Persists a given edge.
      *
      * @param edge the edge
-     * @return a Result containing the endpoints indices
+     * @return the endpoint's indices
      */
     private fun persistEdge(edge: Edge<T>): Result<Pair<Int, Int>> {
         val endpointValue1 = edge.endpoint1.value
@@ -221,16 +215,24 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
     }
 
 
+    /**
+     * Persists an edge symmetrically, i.e. in the upper and lower
+     * triangle of the adjacency matrix.
+     *
+     * @param i the first endpoints index
+     * @param k the second endpoints index
+     * @param edge the edge to store
+     * @return the endpoint's indices
+     */
     private fun persistEdgeSymmetrically(i: Int, k: Int, edge: Edge<T>): Result<Pair<Int, Int>> {
-        println("   g[$i][$k] = $edge") // TODO: erase!
+        // store the edge symmetrically, as the graph is undirected:
         g[i][k] = edge
-        println("   g[$k][$i] = $edge") // TODO: erase!
         g[k][i] = edge
 
         // persist the edge in a separate list for faster lookups:
         edges.add(edge)
 
-        // return the existing indices:
+        // return its indices:
         return Result.success(Pair(i, k))
     }
 

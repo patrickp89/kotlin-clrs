@@ -10,7 +10,7 @@ class DoublyLinkedList<T> : List<T> {
 
     constructor() {
         head.next = tail
-        tail.pred = head
+        tail.previous = head
     }
 
     override fun search(k: Long): T? {
@@ -23,17 +23,17 @@ class DoublyLinkedList<T> : List<T> {
         val y = head.next
         head.next = newNode
         newNode.next = y
-        y.pred = newNode
-        newNode.pred = head
+        y.previous = newNode
+        newNode.previous = head
         size.incrementAndGet()
         return newNode
     }
 
     override fun delete(k: Long): T? {
         val x = searchNode(k) ?: return null
-        val p = x.pred
+        val p = x.previous
         p.next = x.next
-        p.next.pred = p
+        p.next.previous = p
         size.decrementAndGet()
         return x.element
     }
@@ -58,7 +58,7 @@ class DoublyLinkedList<T> : List<T> {
         val element = e
         val key = k
         var next = this
-        var pred = this
+        var previous = this
     }
 
 }
