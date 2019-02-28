@@ -1,9 +1,8 @@
-package de.netherspace.libs.kotlinclrs
+package de.netherspace.libs.kotlinclrs.sorting
 
-import de.netherspace.libs.kotlinclrs.sorting.*
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is` as Is
 import org.junit.Test
+import org.hamcrest.Matchers.`is` as Is
 
 class SortingAlgorithmsTest {
 

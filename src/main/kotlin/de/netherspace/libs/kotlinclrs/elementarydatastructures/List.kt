@@ -12,6 +12,4 @@ interface List<T> {
 
 }
 
-abstract class Node {
-
-}
+abstract class Node {}
