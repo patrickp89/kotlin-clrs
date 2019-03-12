@@ -30,6 +30,12 @@ class SortingAlgorithmsTest {
         testSortingAlgorithm(a, QuickSort())
     }
 
+    @Test
+    fun testHeapSort() {
+        val a = getTestArray()
+        testSortingAlgorithm(a, HeapSort())
+    }
+
     private fun getTestArray(): Array<Int> {
         return arrayOf(9, 1 ,8, 2, 7, 3, 6, 4, 5)
     }

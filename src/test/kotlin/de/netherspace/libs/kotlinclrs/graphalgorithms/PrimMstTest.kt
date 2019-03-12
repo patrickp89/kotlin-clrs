@@ -1,12 +1,14 @@
 package de.netherspace.libs.kotlinclrs.graphalgorithms
 
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import org.hamcrest.Matchers.`is` as Is
 
 class PrimMstTest {
 
     @Test
+    @Ignore
     fun testPrimWithSimplyConnectedGraph() {
         val prim = PrimMST()
         val g = Graph<String>(5)
