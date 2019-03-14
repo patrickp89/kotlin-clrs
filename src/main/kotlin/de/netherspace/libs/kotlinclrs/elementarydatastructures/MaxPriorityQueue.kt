@@ -1,13 +1,13 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
+class MaxPriorityQueue<T> : Queue<T> where T : Comparable<T> {
 
     val a: Array<T>
-    val minHeap = MinHeap<T>()
+    val maxHeap = MaxHeap<T>()
 
     constructor(A: Array<T>) {
         a = A
-        minHeap.buildHeap(a)
+        maxHeap.buildHeap(a)
     }
 
     override fun insert(x: T) {
@@ -15,15 +15,15 @@ class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
     }
 
     override fun peek(): T {
-        return minHeap.get(0)
+        return maxHeap.get(0)
     }
 
     override fun extract(): T {
-        return extractMin()
+        return extractMax()
     }
 
     override fun changeKey(x: T, k: Long) {
-        decreaseKey(x, k)
+        increaseKey(x, k)
     }
 
     override fun isEmpty(): Boolean {
@@ -31,21 +31,21 @@ class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
     }
 
     /**
-     * Will return the element with the minimum key.
+     * Will return the element with the maximum key.
      *
-     * @return the element with the minimum key
+     * @return the element with the maximum key
      */
-    private fun extractMin(): T {
+    private fun extractMax(): T {
         TODO("not implemented")
     }
 
     /**
-     * Decreases the key of a given element
+     * Increases the key of a given element
      *
-     * @param x the element who's key will be decreased
+     * @param x the element who's key will be increased
      * @param k the key's new value
      */
-    private fun decreaseKey(x: T, k: Long) {
+    private fun increaseKey(x: T, k: Long) {
         TODO("not implemented")
     }
 

@@ -3,30 +3,27 @@ package de.netherspace.libs.kotlinclrs.elementarydatastructures
 interface Heap<T> {
 
     /**
-     * Inserts a given element into the heap.
+     * Creates a heap from a given array.
      *
-     * @param x the element that will be inserted
+     * @param A the array that will be turned into a heap
      */
-    fun insert(x: T)
+    fun buildHeap(A: Array<T>)
 
     /**
-     * Returns the min/max (depending on the implementation).
+     * Corrects a subtree of the heap. Afterwards all heap
+     * properties will hold for this particular subtree.
      *
-     * @return the min/max
+     * @param i the index of the subtree's root
      */
-    fun peek(): T
-
-    /**
-     * Returns the min/max (depending on the implementation) and
-     * deletes it from the heap.
-     *
-     * @return the min/max
-     */
-    fun extract(): T
-
-    fun buildHeap(a: Array<T>)
-
     fun heapify(i: Int)
+
+    /**
+     * Returns the element at position i.
+     *
+     * @param i the position in the underlying array
+     * @return the element at the given position
+     */
+    fun get(i: Int): T
 
     /**
      * Returns the node's left child.

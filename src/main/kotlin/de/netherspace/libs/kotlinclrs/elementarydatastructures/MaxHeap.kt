@@ -6,23 +6,11 @@ class MaxHeap<T> : ArrayOperations, Heap<T> where T : Comparable<T> {
 
     private val initialArraySize = 10
     //    private val a2 = arrayOfNulls<Heap.HeapElement<T>>(initialArraySize)
-    private lateinit var a2: Array<T>
+    private lateinit var a: Array<T>
     private var heapSize = AtomicInteger(0)
 
-    override fun insert(x: T) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun peek(): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun extract(): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun buildHeap(a: Array<T>) {
-        a2 = a
+    override fun buildHeap(A: Array<T>) {
+        a = A
         heapSize = AtomicInteger(a.size - 1)
         for (i in (a.size / 2) downTo 0) {
             heapify(i)
@@ -44,7 +32,7 @@ class MaxHeap<T> : ArrayOperations, Heap<T> where T : Comparable<T> {
 //                ?: throw Exception("The heap element at index i ($i) does not contain a value!")
 
 //        var max = if ( (l <= heapSize.get()) && (leftChildsElement > iElement) ) {
-        var max = if ((l <= heapSize.get()) && (a2[l] > a2[i])) {
+        var max = if ((l <= heapSize.get()) && (a[l] > a[i])) {
             l
         } else {
             i
@@ -62,18 +50,22 @@ class MaxHeap<T> : ArrayOperations, Heap<T> where T : Comparable<T> {
 //        val maxNodeElement : T = maxNode.element
 //                ?: throw Exception("The max heap element (index $max) does not contain a value!")
 
-        if ((r <= heapSize.get()) && (a2[r] > a2[max])) {
+        if ((r <= heapSize.get()) && (a[r] > a[max])) {
             max = r
         }
 
         if (max != i) {
             // TODO: use swap(a2, i, max)
-            val d = a2[max]
-            a2[max] = a2[i]
-            a2[i] = d
+            val d = a[max]
+            a[max] = a[i]
+            a[i] = d
 
             heapify(max)
         }
+    }
+
+    override fun get(i: Int): T {
+        return a[i]
     }
 
     fun decreaseHeapSize(): Int {
