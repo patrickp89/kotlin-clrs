@@ -1,13 +1,13 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
+class MinPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : Comparable<T> {
 
-    val a: Array<T>
-    val minHeap = MinHeap<T>()
+    private val a: Array<Queue.QueueElement<T>>
+    private val heap = MinHeap<Queue.QueueElement<T>>()
 
-    constructor(A: Array<T>) {
+    constructor(A: Array<Queue.QueueElement<T>>) {
         a = A
-        minHeap.buildHeap(a)
+        heap.buildHeap(a)
     }
 
     override fun insert(x: T) {
@@ -15,15 +15,16 @@ class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
     }
 
     override fun peek(): T {
-        return minHeap.get(0)
+        return heap.get(0).element
+                ?: throw Exception("No element present for maxHeap[0]!")
     }
 
-    override fun extract(): T {
+    override fun extract(): Result<T> {
         return extractMin()
     }
 
-    override fun changeKey(x: T, k: Long) {
-        decreaseKey(x, k)
+    override fun changeKey(i: Int, k: Long): Result<Long> {
+        return decreaseKey(i, k)
     }
 
     override fun isEmpty(): Boolean {
@@ -31,21 +32,22 @@ class MinPriorityQueue<T> : Queue<T> where T : Comparable<T> {
     }
 
     /**
-     * Will return the element with the minimum key.
+     * Return the element with the minimum key.
      *
-     * @return the element with the minimum key
+     * @return a Result containing the element with the minimum key or an exception
      */
-    private fun extractMin(): T {
+    private fun extractMin(): Result<T> {
         TODO("not implemented")
     }
 
     /**
      * Decreases the key of a given element
      *
-     * @param x the element who's key will be decreased
+     * @param i index of the element who's key will be increased
      * @param k the key's new value
+     * @return a Result containing the newly set key or an exception
      */
-    private fun decreaseKey(x: T, k: Long) {
+    private fun decreaseKey(i: Int, k: Long): Result<Long> {
         TODO("not implemented")
     }
 

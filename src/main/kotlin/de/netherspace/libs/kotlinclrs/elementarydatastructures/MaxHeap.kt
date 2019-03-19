@@ -2,7 +2,7 @@ package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
 import java.util.concurrent.atomic.AtomicInteger
 
-class MaxHeap<T> : ArrayOperations, Heap<T> where T : Comparable<T> {
+class MaxHeap<T> : Heap<T>, HeapOperations, ArrayOperations where T : Comparable<T> {
 
     private val initialArraySize = 10
     //    private val a2 = arrayOfNulls<Heap.HeapElement<T>>(initialArraySize)
@@ -66,6 +66,10 @@ class MaxHeap<T> : ArrayOperations, Heap<T> where T : Comparable<T> {
 
     override fun get(i: Int): T {
         return a[i]
+    }
+
+    override fun getHeapSize(): Int {
+        return heapSize.get()
     }
 
     fun decreaseHeapSize(): Int {

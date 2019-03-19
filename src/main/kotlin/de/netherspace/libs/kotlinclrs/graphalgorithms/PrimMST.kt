@@ -11,24 +11,26 @@ class PrimMST : MinimumSpanningTreeAlgorithm {
 
         // pick an arbitrary root:
         val r = g.vertices()[0]
+        val V : Array<Graph.Vertex<T>> = g.vertices()
+                .toTypedArray()
+                .clone()
 
-        val q = MinPriorityQueue<Graph.Vertex<T>>()
-
-        g.vertices().forEach {
+        V.forEach {
             // TODO: schluessel[it] = infinity
             // TODO: lambda[it] = null
         }
 
         // TODO: schluessel[r] = 0
 
-        g.vertices().forEach {
-            q.insert(it)
-        }
+//        val q = MinPriorityQueue<Graph.Vertex<T>>(V)
+//        g.vertices().forEach {
+//            q.insert(it)
+//        }
 
-        while (!q.isEmpty()) {
-            val u = q.extract()
-            TODO("not implemented")
-        }
+//        while (!q.isEmpty()) {
+//            val u = q.extract()
+//            TODO("not implemented")
+//        }
 
         TODO("not implemented")
     }

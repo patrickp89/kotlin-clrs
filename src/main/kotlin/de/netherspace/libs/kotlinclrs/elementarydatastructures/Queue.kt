@@ -20,18 +20,19 @@ interface Queue<T> {
      * Returns the min/max (depending on the implementation) and
      * deletes it from the queue.
      *
-     * @return the min/max
+     * @return a Result containing the min/max or an exception
      */
-    fun extract() : T
+    fun extract() : Result<T>
 
     /**
      * Increases/decreases (depending on the implementation) the
      * key for a given element.
      *
-     * @param x the element who's key will be increased/decreased
+     * @param i index of the the element who's key will be increased/decreased
      * @param k the element's new key value
+     * @return a Result containing the newly set key or an exception
      */
-    fun changeKey(x: T, k: Long)
+    fun changeKey(i: Int, k: Long): Result<Long>
 
     /**
      * Checks whether the queue is empty.
@@ -39,5 +40,14 @@ interface Queue<T> {
      * @return true if empty, false otherwise
      */
     fun isEmpty() : Boolean
+
+    /**
+     * An element of a queue, wrapping the actual (generic) value.
+     */
+    class QueueElement<T>(val element: T?, var key: Long) : Comparable<QueueElement<T>> {
+        override fun compareTo(other: QueueElement<T>): Int {
+            return this.key.compareTo(other.key)
+        }
+    }
 
 }
