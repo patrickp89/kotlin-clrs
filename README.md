@@ -16,5 +16,6 @@ Sorting algorithms:
 Advanced data structures:
 * [Disjoint Set](src/main/kotlin/de/netherspace/libs/kotlinclrs/advanceddatastructures/DisjointSet.kt)
 
-Ggraph algorithms:
+Graph algorithms:
 * [Kruskal's Algorithm](src/main/kotlin/de/netherspace/libs/kotlinclrs/graphalgorithms/KruskalMST.kt) (Minimum Spanning Tree)
+
