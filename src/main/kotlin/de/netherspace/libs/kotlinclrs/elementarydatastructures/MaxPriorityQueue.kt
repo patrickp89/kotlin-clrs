@@ -1,6 +1,6 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-class MaxPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : Comparable<T> {
+class MaxPriorityQueue<T> : Queue<T>, QueueOperations<T>, HeapOperations<T>, ArrayOperations where T : Comparable<T> {
 
     private val a: Array<Queue.QueueElement<T>>
     private val heap = MaxHeap<Queue.QueueElement<T>>()
@@ -20,7 +20,7 @@ class MaxPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : 
     }
 
     override fun extract(): Result<T> {
-        return extractMax()
+        return extractHead(a, heap)
     }
 
     override fun changeKey(i: Int, k: Long): Result<Long> {
@@ -29,27 +29,6 @@ class MaxPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : 
 
     override fun isEmpty(): Boolean {
         return a.isEmpty()
-    }
-
-    /**
-     * Return the element with the maximum key.
-     *
-     * @return a Result containing the element with the maximum key or an exception
-     */
-    private fun extractMax(): Result<T> {
-        val heapSize = heap.getHeapSize()
-        if (heapSize < 1) {
-            return Result.failure(Exception("Heap underflow!"))
-        }
-
-        val max = a[0]
-        a[0] = a[heapSize]
-        heap.decreaseHeapSize()
-        heap.heapify(0)
-
-        val element: T = max.element
-                ?: throw Exception("No element present for maxHeap[0]!")
-        return Result.success(element)
     }
 
     /**
@@ -62,12 +41,12 @@ class MaxPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : 
     private fun increaseKey(i: Int, k: Long): Result<Long> {
         var j = i
         val oldKey = a[j].key
-        if (k < oldKey) {
+        if (k < oldKey) { // TODO: parameterize this comparison and extract this function!
             return Result.failure(Exception("New key ($k) is less than the old key ($oldKey)!"))
         }
         a[j].key = k
 
-        while ((j > 0) && (a[parent(j)].key < a[j].key)) {
+        while ((j > 0) && (a[parent(j)].key < a[j].key)) { // TODO: parameterize this comparison and extract this function!
             swap(a, j, parent(j))
             j = parent(j)
         }

@@ -1,5 +1,7 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
+import java.util.concurrent.atomic.AtomicInteger
+
 interface Heap<T> {
 
     /**
@@ -26,6 +28,9 @@ interface Heap<T> {
     fun get(i: Int): T
 
     fun getHeapSize(): Int
+
+    fun getHeapSizeCounter() : AtomicInteger
+
 
     /**
      * An element of a heap, wrapping the actual (generic) value.

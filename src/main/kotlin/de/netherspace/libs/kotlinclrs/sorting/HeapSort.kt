@@ -9,7 +9,7 @@ class HeapSort : SortingAlgorithm {
         heap.buildHeap(A)
         for (i in (A.size - 1) downTo 1) {
             swap(A, 0, i)
-            heap.decreaseHeapSize()
+            heap.decreaseHeapSize(heap.getHeapSizeCounter())
             heap.heapify(0)
         }
     }

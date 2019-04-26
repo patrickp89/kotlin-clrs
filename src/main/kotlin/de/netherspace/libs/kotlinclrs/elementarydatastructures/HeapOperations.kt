@@ -1,6 +1,8 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-interface HeapOperations {
+import java.util.concurrent.atomic.AtomicInteger
+
+interface HeapOperations<T> {
     /**
      * Returns the node's left child.
      *
@@ -30,4 +32,13 @@ interface HeapOperations {
     fun parent(i: Int): Int {
         return (i - 1) / 2
     }
+
+    fun increaseHeapSize(heapSize: AtomicInteger): Int {
+        return heapSize.incrementAndGet()
+    }
+
+    fun decreaseHeapSize(heapSize: AtomicInteger): Int {
+        return heapSize.decrementAndGet()
+    }
+
 }

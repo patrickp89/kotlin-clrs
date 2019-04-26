@@ -1,6 +1,6 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-class MinPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : Comparable<T> {
+class MinPriorityQueue<T> : Queue<T>, QueueOperations<T>, HeapOperations<T>, ArrayOperations where T : Comparable<T> {
 
     private val a: Array<Queue.QueueElement<T>>
     private val heap = MinHeap<Queue.QueueElement<T>>()
@@ -20,7 +20,7 @@ class MinPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : 
     }
 
     override fun extract(): Result<T> {
-        return extractMin()
+        return extractHead(a, heap)
     }
 
     override fun changeKey(i: Int, k: Long): Result<Long> {
@@ -32,23 +32,25 @@ class MinPriorityQueue<T> : Queue<T>, HeapOperations, ArrayOperations where T : 
     }
 
     /**
-     * Return the element with the minimum key.
-     *
-     * @return a Result containing the element with the minimum key or an exception
-     */
-    private fun extractMin(): Result<T> {
-        TODO("not implemented")
-    }
-
-    /**
      * Decreases the key of a given element
      *
-     * @param i index of the element who's key will be increased
+     * @param i index of the element who's key will be decreased
      * @param k the key's new value
      * @return a Result containing the newly set key or an exception
      */
     private fun decreaseKey(i: Int, k: Long): Result<Long> {
-        TODO("not implemented")
+        var j = i
+        val oldKey = a[j].key
+        if (k > oldKey) { // TODO: parameterize this comparison and extract this function!
+            return Result.failure(Exception("New key ($k) is greater than the old key ($oldKey)!"))
+        }
+        a[j].key = k
+
+        while ((j > 0) && (a[parent(j)].key > a[j].key)) { // TODO: parameterize this comparison and extract this function!
+            swap(a, j, parent(j))
+            j = parent(j)
+        }
+        return Result.success(k)
     }
 
 }
