@@ -8,7 +8,7 @@ class SinglyLinkedList<T> : List<T> {
     private val tail = SinglyLinkedNode<T>(null, -1)
     private val size = AtomicInteger(0)
 
-    constructor() {
+    init {
         head.next = tail
     }
 

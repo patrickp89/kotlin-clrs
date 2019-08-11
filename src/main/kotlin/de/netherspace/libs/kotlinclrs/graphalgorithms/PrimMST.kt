@@ -1,6 +1,7 @@
 package de.netherspace.libs.kotlinclrs.graphalgorithms
 
 import de.netherspace.libs.kotlinclrs.elementarydatastructures.MinPriorityQueue
+import de.netherspace.libs.kotlinclrs.elementarydatastructures.Queue
 
 class PrimMST : MinimumSpanningTreeAlgorithm {
 
@@ -11,21 +12,28 @@ class PrimMST : MinimumSpanningTreeAlgorithm {
 
         // pick an arbitrary root:
         val r = g.vertices()[0]
-        val V : Array<Graph.Vertex<T>> = g.vertices()
+        val V: Array<Graph.Vertex<T>> = g.vertices()
                 .toTypedArray()
                 .clone()
 
         V.forEach {
-            // TODO: schluessel[it] = infinity
             // TODO: lambda[it] = null
         }
 
         // TODO: schluessel[r] = 0
 
-//        val q = MinPriorityQueue<Graph.Vertex<T>>(V)
-//        g.vertices().forEach {
-//            q.insert(it)
-//        }
+        val queueElements: Sequence<Queue.QueueElement<Graph.Vertex<T>>> = g.vertices()
+                .asSequence()
+                .map { Queue.QueueElement(it, Long.MAX_VALUE) } // schluessel[it] = infinity
+
+        val A: Array<Queue.QueueElement<Graph.Vertex<T>>> = queueElements
+                .toList()
+                .toTypedArray() // TODO: erase, the underlying Array is refactored to be a Sequence!
+
+        val q = MinPriorityQueue(A)
+        g.vertices().forEach {
+            q.insert(it)
+        }
 
 //        while (!q.isEmpty()) {
 //            val u = q.extract()

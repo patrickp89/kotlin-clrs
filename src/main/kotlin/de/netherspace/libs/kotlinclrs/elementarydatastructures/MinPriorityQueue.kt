@@ -1,12 +1,12 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
-class MinPriorityQueue<T> : Queue<T>, QueueOperations<T>, HeapOperations<T>, ArrayOperations where T : Comparable<T> {
+class MinPriorityQueue<T>(
+        private val a: Array<Queue.QueueElement<T>>
+) : Queue<T>, QueueOperations<T>, HeapOperations<T>, ArrayOperations where T : Comparable<T> {
 
-    private val a: Array<Queue.QueueElement<T>>
     private val heap = MinHeap<Queue.QueueElement<T>>()
 
-    constructor(A: Array<Queue.QueueElement<T>>) {
-        a = A
+    init {
         heap.buildHeap(a)
     }
 

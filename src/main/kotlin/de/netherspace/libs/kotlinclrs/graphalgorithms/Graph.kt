@@ -281,7 +281,11 @@ class Graph<T>(private val initialVertexCount: Int) { // TODO: inherit from "Gra
     /**
      * A simple vertex class that stores a vertex' value.
      */
-    class Vertex<T>(val value: T)
+    class Vertex<T>(val value: T) : Comparable<Vertex<T>> {
+        override fun compareTo(other: Vertex<T>): Int {
+            TODO("not implemented")
+        }
+    }
 
 
     /**

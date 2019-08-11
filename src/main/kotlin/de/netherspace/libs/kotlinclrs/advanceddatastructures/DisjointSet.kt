@@ -96,7 +96,7 @@ class DisjointSet<T> {
         var head = DisjointSetNode<U>(null, -1)
         var tail = DisjointSetNode<U>(null, -1)
 
-        constructor() {
+        init {
             head.next = tail
             tail.previous = head
         }
