@@ -123,4 +123,60 @@ class QueueTest {
         assertThat(a[1].element, Is(one))
     }
 
+
+    @Test
+    fun testMinPriorityQueueInsert() {
+        val one = "one"
+        val two = "two"
+        val three = "three"
+
+        // all elements have the initial key 450:
+        var a = arrayOf(one, two, three)
+                .map { Queue.QueueElement(it, 450) }
+                .toTypedArray()
+        val q = MinPriorityQueue(a)
+        assertThat(q.isEmpty(), Is(false))
+
+        // the elements and their order before inserting a new one:
+        assertThat(a[0].element, Is(one))
+        assertThat(a[1].element, Is(two))
+        assertThat(a[2].element, Is(three))
+
+        val four = "four"
+        q.insert(four, 3)
+        a = q.getArray()
+        assertThat(a[0].element, Is(four))
+        assertThat(a[1].element, Is(one))
+        assertThat(a[2].element, Is(three))
+        assertThat(a[3].element, Is(two))
+    }
+
+
+    @Test
+    fun testMaxPriorityQueueInsert() {
+        val one = "one"
+        val two = "two"
+        val three = "three"
+
+        // all elements have the initial key 10:
+        var a = arrayOf(one, two, three)
+                .map { Queue.QueueElement(it, 10) }
+                .toTypedArray()
+        val q = MaxPriorityQueue(a)
+        assertThat(q.isEmpty(), Is(false))
+
+        // the elements and their order before inserting a new one:
+        assertThat(a[0].element, Is(one))
+        assertThat(a[1].element, Is(two))
+        assertThat(a[2].element, Is(three))
+
+        val four = "four"
+        q.insert(four, 3)
+        a = q.getArray()
+        assertThat(a[0].element, Is(one))
+        assertThat(a[1].element, Is(two))
+        assertThat(a[2].element, Is(three))
+        assertThat(a[3].element, Is(four))
+    }
+
 }

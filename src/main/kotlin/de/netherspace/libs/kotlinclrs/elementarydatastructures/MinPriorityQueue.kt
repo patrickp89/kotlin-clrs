@@ -1,17 +1,18 @@
 package de.netherspace.libs.kotlinclrs.elementarydatastructures
 
 class MinPriorityQueue<T>(
-        private val a: Array<Queue.QueueElement<T>>
+        private var a: Array<Queue.QueueElement<T>>
 ) : Queue<T>, QueueOperations<T>, HeapOperations<T>, ArrayOperations where T : Comparable<T> {
-
     private val heap = MinHeap<Queue.QueueElement<T>>()
 
     init {
         heap.buildHeap(a)
     }
 
-    override fun insert(x: T) {
-        TODO("not implemented")
+    override fun insert(x: T, k: Long) {
+        increaseHeapSize(heap.getHeapSizeCounter())
+        a = insertInfinityElement(a, x)
+        decreaseKey(heap.getHeapSize(), k)
     }
 
     override fun peek(): T {
@@ -29,6 +30,10 @@ class MinPriorityQueue<T>(
 
     override fun isEmpty(): Boolean {
         return a.isEmpty()
+    }
+
+    override fun getArray(): Array<Queue.QueueElement<T>> {
+        return a
     }
 
     /**

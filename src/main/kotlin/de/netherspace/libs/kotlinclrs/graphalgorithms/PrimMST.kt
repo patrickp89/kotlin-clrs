@@ -30,9 +30,10 @@ class PrimMST : MinimumSpanningTreeAlgorithm {
                 .toList()
                 .toTypedArray() // TODO: erase, the underlying Array is refactored to be a Sequence!
 
+        // Q <- V[G]:
         val q = MinPriorityQueue(A)
         g.vertices().forEach {
-            q.insert(it)
+            q.insert(it, 666L) // TODO: what's the proper key??
         }
 
 //        while (!q.isEmpty()) {

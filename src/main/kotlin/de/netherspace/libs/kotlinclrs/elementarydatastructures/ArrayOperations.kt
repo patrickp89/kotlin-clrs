@@ -11,4 +11,24 @@ interface ArrayOperations {
         A[i] = d
     }
 
+    /**
+     * Doubles the size of an array.
+     */
+    fun <T> resizeArray(a: Array<T?>): Array<T?> {
+        val newSize = a.size * 2
+        return a.copyOf(newSize)
+    }
+
+    /**
+     * Shrinks the size of an array.
+     */
+    fun <T> shrink(a: Array<T?>, lowerBoundry: Int): Array<T?> {
+        val newSize = a.size / 2
+        return if (newSize > lowerBoundry) {
+            a.copyOf(newSize)
+        } else {
+            a
+        }
+    }
+
 }

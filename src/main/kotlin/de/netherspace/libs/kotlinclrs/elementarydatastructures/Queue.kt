@@ -6,15 +6,16 @@ interface Queue<T> {
      * Inserts a given element into the queue.
      *
      * @param x the element that will be inserted
+     * @param k the key
      */
-    fun insert(x: T)
+    fun insert(x: T, k: Long)
 
     /**
      * Returns the min/max (depending on the implementation).
      *
      * @return the min/max
      */
-    fun peek() : T
+    fun peek(): T
 
     /**
      * Returns the min/max (depending on the implementation) and
@@ -22,7 +23,7 @@ interface Queue<T> {
      *
      * @return a Result containing the min/max or an exception
      */
-    fun extract() : Result<T>
+    fun extract(): Result<T>
 
     /**
      * Increases/decreases (depending on the implementation) the
@@ -39,7 +40,14 @@ interface Queue<T> {
      *
      * @return true if empty, false otherwise
      */
-    fun isEmpty() : Boolean
+    fun isEmpty(): Boolean
+
+    /**
+     * Returns the underlying array.
+     *
+     * @return the array
+     */
+    fun getArray(): Array<QueueElement<T>>
 
     /**
      * An element of a queue, wrapping the actual (generic) value.
